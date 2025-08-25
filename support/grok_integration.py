@@ -34,7 +34,7 @@ def generate_grok_response(subject, message):
         prompt = f"""
         As a customer support agent, please provide a professional and helpful response to the following customer query.
         
-        IMPORTANT: Your response MUST be under 250 characters total and focus on being concise yet helpful.
+        IMPORTANT: Your response MUST be under 255 characters total and focus on being concise yet helpful.
         
         Ticket Subject: {subject}
         Customer Message: {message}
@@ -68,7 +68,7 @@ def generate_grok_response(subject, message):
         ai_response = result['choices'][0]['message']['content'].strip()
         
         # Ensure response is within character limit
-        if len(ai_response) > 250:
+        if len(ai_response) > 255:
             ai_response = ai_response[:247] + "..."
             
         return ai_response

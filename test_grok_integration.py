@@ -15,7 +15,7 @@ from support.grok_integration import generate_grok_response, test_grok_connectio
 
 def test_grok_responses():
     """Test Grok API with various customer support scenarios"""
-    print("🧪 Testing Grok API Integration...")
+    print("Testing Grok API Integration...")
     print("=" * 50)
     
     # Test cases
@@ -38,36 +38,36 @@ def test_grok_responses():
         }
     ]
     
-    print("🔗 Testing Grok API connection...")
+    print("Testing Grok API connection...")
     connection_ok = test_grok_connection()
     
     if not connection_ok:
-        print("❌ Cannot proceed with testing - API connection failed")
-        print("💡 Make sure GROK_API_KEY is set in your environment variables")
+        print("Cannot proceed with testing - API connection failed")
+        print("Make sure GROK_API_KEY is set in your environment variables")
         return False
     
-    print("✅ Connection successful! Testing responses...")
+    print("Connection successful! Testing responses...")
     print("-" * 50)
     
     all_success = True
     
     for i, test_case in enumerate(test_cases, 1):
-        print(f"\n📋 Test Case {i}: {test_case['subject']}")
-        print(f"💬 Message: {test_case['message']}")
+        print(f"\nTest Case {i}: {test_case['subject']}")
+        print(f"Message: {test_case['message']}")
         
         try:
             response = generate_grok_response(test_case['subject'], test_case['message'])
-            print(f"🤖 Response: {response}")
-            print(f"📏 Length: {len(response)} characters")
+            print(f"Response: {response}")
+            print(f"Length: {len(response)} characters")
             
             if "error" in response.lower():
-                print(f"❌ Error in response: {response}")
+                print(f"Error in response: {response}")
                 all_success = False
             else:
-                print("✅ Response generated successfully")
+                print("Response generated successfully")
                 
         except Exception as e:
-            print(f"❌ Test failed: {e}")
+            print(f"Test failed: {e}")
             all_success = False
     
     return all_success
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     
     if success:
         print("\n" + "=" * 50)
-        print("🎉 All Grok API tests passed!")
-        print("\n💡 The Grok integration is ready to use in your customer support application.")
+        print("All Grok API tests passed!")
+        print("\nThe Grok integration is ready to use in your customer support application.")
     else:
-        print("\n❌ Some tests failed. Please check your API key and network connection.")
+        print("\nSome tests failed. Please check your API key and network connection.")
