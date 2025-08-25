@@ -1,0 +1,95 @@
+{% extends 'support/base.html' %}
+{% load static %}
+
+{% block content %}
+<h2 class="mb-3 fw-bold">Admin Dashboard</h2>
+
+<div class="ticket-feed">
+  {% for ticket in tickets %}
+    <div class="ticket-card">
+      
+      <!-- Header Row -->
+      <div class="card-header-row">
+        <div>
+          <h6 class="ticket-title">{{ ticket.subject }}</h6>
+          <small class="text-muted">By {{ ticket.customer.username }}</small>
+        </div>
+        <span class="badge {% if ticket.status == 'pending' %}badge-warning
+                            {% elif ticket.status == 'replied' %}badge-success
+                            {% else %}badge-secondary{% endif %}">
+          {{ ticket.get_status_display }}
+        </span>
+      </div>
+
+      <!-- Message -->
+      <p class="ticket-message">{{ ticket.message|truncatewords:15 }}</p>
+
+      <!-- Footer Row -->
+      <div class="card-footer-row">
+        <small class="text-muted">{{ ticket.created_at|date:"M d, Y H:i" }}</small>
+        <div>
+          <a href="{% url 'ticket_detail' ticket.id %}" class="btn btn-sm btn-outline-primary">View</a>
+          <form method="post" action="{% url 'delete_ticket' ticket.id %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-danger"
+                    onclick="return confirm('Are you sure you want to delete this ticket?');">
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-muted text-center">No tickets available</p>
+  {% endfor %}
+</div>
+
+<style>
+.ticket-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* reduced spacing between cards */
+}
+
+/* Card */
+.ticket-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 12px; /* reduced padding inside */
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* Rows */
+.card-header-row, .card-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px; /* reduced row gap */
+}
+
+/* Title */
+.ticket-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Message */
+.ticket-message {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 4px 0; /* reduced space around message */
+}
+
+/* Badges */
+.badge {
+  font-size: 0.7rem;
+  padding: 3px 7px;
+  border-radius: 12px;
+}
+.badge-warning { background: #ffeeba; color: #856404; }
+.badge-success { background: #d4edda; color: #155724; }
+.badge-secondary { background: #e2e3e5; color: #383d41; }
+</style>
+{% endblock %}

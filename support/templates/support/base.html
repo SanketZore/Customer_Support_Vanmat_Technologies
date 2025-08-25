@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Customer Support{% endblock %}</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 0.75rem 2rem;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #007bff !important;
+            margin-bottom: 5px;
+        }
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .nav-link {
+            color: #495057 !important;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            color: #007bff !important;
+        }
+        .welcome-text {
+            font-weight: 500;
+            color: #495057;
+            margin:5px;
+        }
+        .card {
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .alert {
+            border-radius: 0.5rem;
+        }
+        footer {
+            margin-top: 50px;
+            padding: 20px 0;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <!-- Left: Brand -->
+        <a class="navbar-brand me-auto" href="{% if user.is_authenticated %}{% if user.is_staff %}{% url 'admin_dashboard' %}{% else %}{% url 'customer_dashboard' %}{% endif %}{% else %}{% url 'login' %}{% endif %}">
+            CUSTOMER SUPPORT
+        </a>
+
+        <!-- Right: User Info / Logout -->
+        <div class="nav-user ms-auto">
+            {% if user.is_authenticated %}
+                <span class="welcome-text">Hello, {{ user.username }}</span>
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a class="btn btn-outline-primary btn-sm" href="{% url 'login' %}">Login</a>
+                <a class="btn btn-primary btn-sm" href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<!-- Main Container -->
+<div class="container mt-5">
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Content Block -->
+    <div class="card p-4 mb-4">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    &copy; {{ now.year }} Customer Support. All rights reserved.
+</footer>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script>
+    // Auto dismiss alerts after 2 seconds
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                // Bootstrap 5 alert dispose method
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 2000); // 2000ms = 2s
+        });
+    });
+</script>
+</body>
+</html>
