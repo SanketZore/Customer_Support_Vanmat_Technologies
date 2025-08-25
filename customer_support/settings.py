@@ -98,6 +98,7 @@ STATICFILES_DIRS = [
 ]
 
 # Default primary key field type
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Login/Logout URLs
